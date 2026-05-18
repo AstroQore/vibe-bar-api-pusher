@@ -319,7 +319,7 @@ def test_build_provider_card_multi_uses_plan_when_no_display_name():
     meta = pusher.lookup_meta("tencentTokenPlan")
     # No instance_meta to test the plan-as-disambiguator fallback
     card = pusher.build_provider_card(meta, instance_meta=None, raw=raw, multi_instance=True)
-    assert card["id"] == "tencent-token::standard"
+    assert card["id"] == "tencent-token-plan::standard"
     assert "Standard" in card["subtitle"]
 
 
@@ -336,20 +336,20 @@ def test_build_envelope_against_fixture():
     assert len(ids) == len(set(ids))
 
     # Primary: claude merged from cli-claude + 2 quota-v1-* files → one card
-    assert ids.count("claude") == 1
+    assert ids.count("claude-cli") == 1
 
     # Single-instance misc tools keep bare ids
-    assert "gemini" in ids
+    assert "gemini-cli" in ids
     assert "baidu-qianfan" in ids
-    assert "alibaba-token" in ids
+    assert "alibaba-token-plan" in ids
 
     # Multi-instance openCodeGo (Google + Github)
     assert "opencode-go::google" in ids
     assert "opencode-go::github" in ids
 
     # Multi-instance tencentTokenPlan (Generic + Hy)
-    assert "tencent-token::generic" in ids
-    assert "tencent-token::hy" in ids
+    assert "tencent-token-plan::generic" in ids
+    assert "tencent-token-plan::hy" in ids
 
     # kimi is isVisible=false in the fixture settings, no quota file copied
     assert not any(i.startswith("kimi") for i in ids)
@@ -360,13 +360,13 @@ def test_build_envelope_multi_instance_carries_subtitle_label():
     by_id = {p["id"]: p for p in payload["providers"]}
     assert by_id["opencode-go::google"]["subtitle"] == "Workspace · Google"
     assert by_id["opencode-go::github"]["subtitle"] == "Workspace · Github"
-    assert by_id["tencent-token::generic"]["subtitle"] == "Token Plan · Generic"
-    assert by_id["tencent-token::hy"]["subtitle"] == "Token Plan · Hy"
+    assert by_id["tencent-token-plan::generic"]["subtitle"] == "Token Plan · Generic"
+    assert by_id["tencent-token-plan::hy"]["subtitle"] == "Token Plan · Hy"
 
 
 def test_build_envelope_claude_card_has_merged_buckets():
     payload = pusher.build_envelope(make_cfg())
-    claude = next(p for p in payload["providers"] if p["id"] == "claude")
+    claude = next(p for p in payload["providers"] if p["id"] == "claude-cli")
     labels = [m["label"] for m in claude["metrics"]]
     # Fresh quota-v1 file contributes Weekly + Weekly_sonnet + Weekly_design + daily_routines
     # in addition to the five_hour from any file
@@ -380,7 +380,7 @@ def test_build_envelope_legacy_fallback_when_no_settings(tmp_path: Path):
     payload = pusher.build_envelope(cfg)
     ids = [p["id"] for p in payload["providers"]]
     # Primary still merges
-    assert ids.count("claude") == 1
+    assert ids.count("claude-cli") == 1
     # Multi-instance misc tools collapse to a single id each in legacy mode
     # (whichever file the loop encounters last for that tool)
     assert ids.count("opencode-go") <= 2  # may have stable order via sorted glob
