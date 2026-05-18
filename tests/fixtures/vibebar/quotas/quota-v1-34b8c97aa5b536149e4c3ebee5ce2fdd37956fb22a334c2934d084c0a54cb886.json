@@ -1,0 +1,12 @@
+{
+  "buckets" : [
+    {
+      "id" : "five_hour",
+      "shortLabel" : "5h",
+      "title" : "5 Hours",
+      "usedPercent" : 10
+    }
+  ],
+  "queriedAt" : 800817996.902676,
+  "tool" : "claude"
+}

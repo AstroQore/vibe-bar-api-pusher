@@ -1,0 +1,48 @@
+{
+  "buckets" : [
+    {
+      "id" : "five_hour",
+      "rawWindowSeconds" : 18000,
+      "resetAt" : 800837400.2030001,
+      "shortLabel" : "5h",
+      "title" : "5 Hours",
+      "usedPercent" : 0
+    },
+    {
+      "id" : "weekly",
+      "rawWindowSeconds" : 604800,
+      "resetAt" : 801086401.2030001,
+      "shortLabel" : "All models",
+      "title" : "Weekly",
+      "usedPercent" : 9
+    },
+    {
+      "groupTitle" : "Sonnet",
+      "id" : "weekly_sonnet",
+      "rawWindowSeconds" : 604800,
+      "shortLabel" : "Sonnet wk",
+      "title" : "Weekly",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "Designs",
+      "id" : "weekly_design",
+      "rawWindowSeconds" : 604800,
+      "resetAt" : 801086401.2030001,
+      "shortLabel" : "Designs",
+      "title" : "Weekly",
+      "usedPercent" : 7
+    },
+    {
+      "groupTitle" : "Daily Routines",
+      "id" : "daily_routines",
+      "rawWindowSeconds" : 604800,
+      "shortLabel" : "Routine wk",
+      "title" : "Weekly",
+      "usedPercent" : 0
+    }
+  ],
+  "plan" : "Max",
+  "queriedAt" : 800819474.722141,
+  "tool" : "claude"
+}

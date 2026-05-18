@@ -1,0 +1,38 @@
+{
+  "buckets" : [
+    {
+      "groupTitle" : "Flash",
+      "id" : "gemini.gemini-2.5-flash",
+      "resetAt" : 800905875,
+      "shortLabel" : "Flash",
+      "title" : "Flash",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "Flash Lite",
+      "id" : "gemini.gemini-2.5-flash-lite",
+      "resetAt" : 800905875,
+      "shortLabel" : "Lite",
+      "title" : "Flash Lite",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "Pro",
+      "id" : "gemini.gemini-2.5-pro",
+      "resetAt" : 800905875,
+      "shortLabel" : "Pro",
+      "title" : "Pro",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "Flash Lite",
+      "id" : "gemini.gemini-3.1-flash-lite",
+      "resetAt" : 800905875,
+      "shortLabel" : "Lite",
+      "title" : "Flash Lite",
+      "usedPercent" : 0
+    }
+  ],
+  "queriedAt" : 800819475.302284,
+  "tool" : "gemini"
+}

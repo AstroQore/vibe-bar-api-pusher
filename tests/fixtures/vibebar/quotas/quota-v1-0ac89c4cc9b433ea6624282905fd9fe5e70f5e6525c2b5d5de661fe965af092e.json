@@ -1,0 +1,15 @@
+{
+  "buckets" : [
+    {
+      "groupTitle" : "Standard",
+      "id" : "alibabaTokenPlan.sfm_tokenplanteams_dp_cn.standard",
+      "resetAt" : 803462400,
+      "shortLabel" : "Standard credits",
+      "title" : "Standard Credits",
+      "usedPercent" : 5.2548424099999975
+    }
+  ],
+  "plan" : "Token Plan · Team · Standard",
+  "queriedAt" : 800819494.790444,
+  "tool" : "alibabaTokenPlan"
+}

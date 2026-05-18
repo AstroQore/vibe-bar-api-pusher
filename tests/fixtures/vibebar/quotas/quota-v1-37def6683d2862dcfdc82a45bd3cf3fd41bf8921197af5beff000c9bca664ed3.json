@@ -1,0 +1,30 @@
+{
+  "buckets" : [
+    {
+      "id" : "baiduQianfan.5h",
+      "rawWindowSeconds" : 18000,
+      "resetAt" : 800820600,
+      "shortLabel" : "5h",
+      "title" : "5 Hours",
+      "usedPercent" : 1.9166666666666665
+    },
+    {
+      "id" : "baiduQianfan.weekly",
+      "rawWindowSeconds" : 604800,
+      "resetAt" : 801331200,
+      "shortLabel" : "Wk",
+      "title" : "Weekly",
+      "usedPercent" : 0.2577777777777778
+    },
+    {
+      "id" : "baiduQianfan.monthly",
+      "resetAt" : 803480119,
+      "shortLabel" : "Mo",
+      "title" : "Monthly",
+      "usedPercent" : 0.1288888888888889
+    }
+  ],
+  "plan" : "Pro",
+  "queriedAt" : 800819499.396973,
+  "tool" : "baiduQianfan"
+}

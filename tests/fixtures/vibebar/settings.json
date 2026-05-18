@@ -1,0 +1,57 @@
+{
+  "refreshIntervalSeconds": 600,
+  "miscProviderInstances": [
+    {
+      "id": "gemini",
+      "tool": "gemini",
+      "isVisible": true,
+      "settings": {"cookieSource": "auto", "sourceMode": "auto"}
+    },
+    {
+      "id": "baiduQianfan",
+      "tool": "baiduQianfan",
+      "isVisible": true,
+      "settings": {"cookieSource": "auto", "sourceMode": "auto"}
+    },
+    {
+      "id": "alibabaTokenPlan",
+      "tool": "alibabaTokenPlan",
+      "isVisible": true,
+      "settings": {"cookieSource": "auto", "sourceMode": "auto"}
+    },
+    {
+      "id": "openCodeGo",
+      "tool": "openCodeGo",
+      "displayName": "Google",
+      "isVisible": true,
+      "settings": {"cookieSource": "auto", "sourceMode": "auto"}
+    },
+    {
+      "id": "openCodeGo-e4bb8e3d-b4b8-4961-b6f3-c9580566f74f",
+      "tool": "openCodeGo",
+      "displayName": "Github",
+      "isVisible": true,
+      "settings": {"cookieSource": "auto", "sourceMode": "auto"}
+    },
+    {
+      "id": "tencentTokenPlan",
+      "tool": "tencentTokenPlan",
+      "displayName": "Generic",
+      "isVisible": true,
+      "settings": {"cookieSource": "auto", "sourceMode": "auto"}
+    },
+    {
+      "id": "tencentTokenPlan-d97a81f5-bcb9-4cf7-a960-61fde7e6994d",
+      "tool": "tencentTokenPlan",
+      "displayName": "Hy",
+      "isVisible": true,
+      "settings": {"cookieSource": "auto", "region": "hunyuan", "sourceMode": "auto"}
+    },
+    {
+      "id": "kimi",
+      "tool": "kimi",
+      "isVisible": false,
+      "settings": {"cookieSource": "auto", "sourceMode": "auto"}
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "buckets" : [
+    {
+      "id" : "opencodego.rolling",
+      "rawWindowSeconds" : 18000,
+      "resetAt" : 800837017.044058,
+      "shortLabel" : "5h",
+      "title" : "5 Hours",
+      "usedPercent" : 0
+    },
+    {
+      "id" : "opencodego.weekly",
+      "rawWindowSeconds" : 604800,
+      "resetAt" : 801360000.044058,
+      "shortLabel" : "Wk",
+      "title" : "Weekly",
+      "usedPercent" : 3
+    },
+    {
+      "id" : "opencodego.monthly",
+      "rawWindowSeconds" : 2592000,
+      "resetAt" : 802804917.044058,
+      "shortLabel" : "Month",
+      "title" : "Monthly",
+      "usedPercent" : 51
+    }
+  ],
+  "queriedAt" : 800819480.044058,
+  "tool" : "openCodeGo"
+}

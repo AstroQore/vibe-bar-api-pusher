@@ -1,0 +1,15 @@
+{
+  "buckets" : [
+    {
+      "groupTitle" : "HY Standard",
+      "id" : "tencentTokenPlan.hunyuan.tp_hy_standard",
+      "resetAt" : 803247779,
+      "shortLabel" : "Credits",
+      "title" : "Credits",
+      "usedPercent" : 1.8651330000000002
+    }
+  ],
+  "plan" : "HY Standard",
+  "queriedAt" : 800819497.88007,
+  "tool" : "tencentTokenPlan"
+}

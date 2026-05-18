@@ -1,0 +1,15 @@
+{
+  "buckets" : [
+    {
+      "groupTitle" : "Standard",
+      "id" : "tencentTokenPlan.generic.tp_standard",
+      "resetAt" : 803492219,
+      "shortLabel" : "Credits",
+      "title" : "Credits",
+      "usedPercent" : 0.016963
+    }
+  ],
+  "plan" : "Standard",
+  "queriedAt" : 800819496.766287,
+  "tool" : "tencentTokenPlan"
+}
