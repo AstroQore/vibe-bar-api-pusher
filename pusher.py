@@ -37,10 +37,19 @@ from dotenv import load_dotenv
 
 APPLE_EPOCH_OFFSET = 978_307_200
 
-# Tools that vibe-bar treats as "primary" — they have CLI + cookie scrape
-# variants that should all collapse into one dashboard card. Misc tools live
-# in `miscProviderInstances` and each visible instance is its own card.
-PRIMARY_TOOLS: frozenset[str] = frozenset({"claude", "codex"})
+# Tools vibe-bar treats as "primary" or "partial-primary" — they have multiple
+# concurrent scrape sources (CLI auth, web cookie, OAuth) writing into separate
+# quota-v1-<hash>.json files. We collapse all of them into one dashboard card
+# per tool, after first dropping any file whose queriedAt is more than
+# PRIMARY_STALENESS_SECONDS behind the freshest one for that tool (so legacy
+# files left over from vibe-bar's misc→partial-primary migration don't bleed
+# their stale buckets into the merged view).
+#
+# Misc tools live in `miscProviderInstances` and each visible instance is its
+# own card.
+PRIMARY_TOOLS: frozenset[str] = frozenset({"claude", "codex", "gemini", "antigravity", "grok"})
+
+PRIMARY_STALENESS_SECONDS: int = 3600  # 1 hour
 
 # Display metadata for every vibe-bar ToolType, mirroring the source-of-truth
 # in vibe-bar's `Sources/VibeBarCore/Models/ToolType.swift`. New tools added
@@ -51,7 +60,8 @@ PROVIDER_META: dict[str, dict] = {
     "alibaba":          {"id": "alibaba",            "display_name": "Bailian",       "subtitle": "Coding Plan",      "icon": "Ba"},
     "alibabaTokenPlan": {"id": "alibaba-token-plan", "display_name": "Bailian",       "subtitle": "Token Plan",       "icon": "Ba"},
     "gemini":           {"id": "gemini-cli",         "display_name": "Gemini",        "subtitle": "Usage",            "icon": "G"},
-    "antigravity":      {"id": "antigravity",        "display_name": "Antigravity",   "subtitle": "Local LSP",        "icon": "Ag"},
+    "antigravity":      {"id": "antigravity",        "display_name": "Antigravity",   "subtitle": "Google AI Pro",    "icon": "Ag"},
+    "grok":             {"id": "grok",               "display_name": "Grok",          "subtitle": "xAI",              "icon": "Gk"},
     "copilot":          {"id": "copilot",            "display_name": "Copilot",       "subtitle": "GitHub Copilot",   "icon": "Co"},
     "zai":              {"id": "zai",                "display_name": "Z.ai",          "subtitle": "Coding Plan",      "icon": "Z"},
     "minimax":          {"id": "minimax",            "display_name": "MiniMax",       "subtitle": "Token Plan",       "icon": "Mx"},
@@ -279,14 +289,35 @@ def collect_primary_files(quotas_dir: Path, tool: str) -> list[tuple[str, dict]]
 def merge_primary_files(files: list[tuple[str, dict]]) -> dict:
     """Merge per-tool files into one synthetic raw quota dict.
 
-    Bucket de-duplication strategy: keep the bucket from the freshest file by
-    default, but if that bucket lacks `resetAt`, fall back to an older file's
-    fuller copy. Top-level fields (`tool`, `plan`, `queriedAt`) come from the
+    Stale files first: every file whose `queriedAt` is more than
+    `PRIMARY_STALENESS_SECONDS` behind the freshest one for the same tool is
+    dropped (logged at WARNING). This silences the legacy `misc-<tool>.json`
+    snapshots left behind when vibe-bar migrated `gemini`/`antigravity`/`grok`
+    out of the misc-instance system — their bucket-id schemas don't match the
+    new partial-primary writer, so merging them would produce a mashed card.
+
+    Within the remaining fresh files, buckets are de-duplicated by id: prefer
+    the freshest entry, but swap in an older one if the freshest lacks
+    `resetAt`. Top-level fields (`tool`, `plan`, `queriedAt`) come from the
     freshest file.
     """
     sorted_files = sorted(files, key=lambda nr: nr[1].get("queriedAt") or 0, reverse=True)
+    if not sorted_files:
+        return {}
+    freshest_at = sorted_files[0][1].get("queriedAt") or 0
+    threshold = freshest_at - PRIMARY_STALENESS_SECONDS
+    fresh_files: list[tuple[str, dict]] = []
+    for name, raw in sorted_files:
+        q = raw.get("queriedAt") or 0
+        if q < threshold:
+            logging.info(
+                "dropping stale %s (queriedAt %s, %.1fh behind freshest %s)",
+                name, q, (freshest_at - q) / 3600.0, sorted_files[0][0],
+            )
+            continue
+        fresh_files.append((name, raw))
     bucket_map: dict[str, dict] = {}
-    for _name, raw in sorted_files:
+    for _name, raw in fresh_files:
         for bucket in raw.get("buckets") or []:
             bid = bucket.get("id")
             if not bid:
@@ -295,9 +326,8 @@ def merge_primary_files(files: list[tuple[str, dict]]) -> dict:
             if existing is None:
                 bucket_map[bid] = bucket
             elif "resetAt" not in existing and "resetAt" in bucket:
-                # Older but more-complete; swap in the fuller record
                 bucket_map[bid] = bucket
-    freshest_raw = sorted_files[0][1]
+    freshest_raw = fresh_files[0][1]
     return {
         "tool": freshest_raw.get("tool"),
         "plan": freshest_raw.get("plan"),

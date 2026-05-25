@@ -1,0 +1,114 @@
+{
+  "buckets" : [
+    {
+      "groupTitle" : "4312\/4500 · 5 hours",
+      "id" : "minimax.coding.0.minimax-m",
+      "rawWindowSeconds" : 18000,
+      "resetAt" : 801403200,
+      "shortLabel" : "5h",
+      "title" : "Text Generation",
+      "usedPercent" : 4.177777777777777
+    },
+    {
+      "groupTitle" : "44429\/45000 · weekly",
+      "id" : "minimax.weekly",
+      "rawWindowSeconds" : 604800,
+      "resetAt" : 801936000,
+      "shortLabel" : "Wk",
+      "title" : "Weekly",
+      "usedPercent" : 1.2688888888888887
+    },
+    {
+      "groupTitle" : "19000\/19000 · Today",
+      "id" : "minimax.coding.1.speech-hd",
+      "rawWindowSeconds" : 18000,
+      "resetAt" : 801417600,
+      "shortLabel" : "5h",
+      "title" : "Text to Speech HD",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "3\/3 · Today",
+      "id" : "minimax.coding.2.minimax-hailuo-2-3-fast-6s-768p",
+      "rawWindowSeconds" : 18000,
+      "resetAt" : 801417600,
+      "shortLabel" : "5h",
+      "title" : "Video Generation Fast",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "3\/3 · Today",
+      "id" : "minimax.coding.3.minimax-hailuo-2-3-6s-768p",
+      "rawWindowSeconds" : 18000,
+      "resetAt" : 801417600,
+      "shortLabel" : "5h",
+      "title" : "Video Generation Standard",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "7\/7 · Today",
+      "id" : "minimax.coding.4.music-2-5",
+      "rawWindowSeconds" : 18000,
+      "resetAt" : 801417600,
+      "shortLabel" : "5h",
+      "title" : "Music Generation v2.5",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "100\/100 · Today",
+      "id" : "minimax.coding.5.music-2-6",
+      "rawWindowSeconds" : 18000,
+      "resetAt" : 801417600,
+      "shortLabel" : "5h",
+      "title" : "Music Generation v2.6",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "100\/100 · Today",
+      "id" : "minimax.coding.6.music-cover",
+      "rawWindowSeconds" : 18000,
+      "resetAt" : 801417600,
+      "shortLabel" : "5h",
+      "title" : "Music Cover",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "100\/100 · Today",
+      "id" : "minimax.coding.7.lyrics-generation",
+      "rawWindowSeconds" : 18000,
+      "resetAt" : 801417600,
+      "shortLabel" : "5h",
+      "title" : "Lyrics Generation",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "200\/200 · Today",
+      "id" : "minimax.coding.8.image-01",
+      "rawWindowSeconds" : 18000,
+      "resetAt" : 801417600,
+      "shortLabel" : "5h",
+      "title" : "Image Generation",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "450\/450 · 5 hours",
+      "id" : "minimax.coding.9.coding-plan-vlm",
+      "rawWindowSeconds" : 18000,
+      "resetAt" : 801403200,
+      "shortLabel" : "5h",
+      "title" : "Image Understanding",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "450\/450 · 5 hours",
+      "id" : "minimax.coding.10.coding-plan-search",
+      "rawWindowSeconds" : 18000,
+      "resetAt" : 801403200,
+      "shortLabel" : "5h",
+      "title" : "Web Search",
+      "usedPercent" : 0
+    }
+  ],
+  "queriedAt" : 801391627.986989,
+  "tool" : "minimax"
+}

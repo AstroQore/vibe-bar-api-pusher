@@ -3,23 +3,24 @@
     {
       "id" : "five_hour",
       "rawWindowSeconds" : 18000,
-      "resetAt" : 800837400.2030001,
+      "resetAt" : 801406200.5079999,
       "shortLabel" : "5h",
       "title" : "5 Hours",
-      "usedPercent" : 0
+      "usedPercent" : 5
     },
     {
       "id" : "weekly",
       "rawWindowSeconds" : 604800,
-      "resetAt" : 801086401.2030001,
+      "resetAt" : 801691200.5079999,
       "shortLabel" : "All models",
       "title" : "Weekly",
-      "usedPercent" : 9
+      "usedPercent" : 16
     },
     {
       "groupTitle" : "Sonnet",
       "id" : "weekly_sonnet",
       "rawWindowSeconds" : 604800,
+      "resetAt" : 801691200.5079999,
       "shortLabel" : "Sonnet wk",
       "title" : "Weekly",
       "usedPercent" : 0
@@ -28,10 +29,10 @@
       "groupTitle" : "Designs",
       "id" : "weekly_design",
       "rawWindowSeconds" : 604800,
-      "resetAt" : 801086401.2030001,
+      "resetAt" : 801691200.5079999,
       "shortLabel" : "Designs",
       "title" : "Weekly",
-      "usedPercent" : 7
+      "usedPercent" : 8
     },
     {
       "groupTitle" : "Daily Routines",
@@ -43,6 +44,6 @@
     }
   ],
   "plan" : "Max",
-  "queriedAt" : 800819474.722141,
+  "queriedAt" : 801391616.214283,
   "tool" : "claude"
 }

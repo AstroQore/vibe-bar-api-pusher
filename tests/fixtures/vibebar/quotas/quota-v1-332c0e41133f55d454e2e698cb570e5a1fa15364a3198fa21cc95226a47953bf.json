@@ -1,0 +1,56 @@
+{
+  "buckets" : [
+    {
+      "id" : "antigravity.MODEL_PLACEHOLDER_M132",
+      "resetAt" : 801001345,
+      "shortLabel" : "MODEL_PLACEHOLDER_M132",
+      "title" : "Gemini 3.5 Flash (High)",
+      "usedPercent" : 0
+    },
+    {
+      "id" : "antigravity.MODEL_PLACEHOLDER_M20",
+      "resetAt" : 801001345,
+      "shortLabel" : "MODEL_PLACEHOLDER_M20",
+      "title" : "Gemini 3.5 Flash (Medium)",
+      "usedPercent" : 0
+    },
+    {
+      "id" : "antigravity.MODEL_PLACEHOLDER_M16",
+      "resetAt" : 801001345,
+      "shortLabel" : "MODEL_PLACEHOLDER_M16",
+      "title" : "Gemini 3.1 Pro (High)",
+      "usedPercent" : 0
+    },
+    {
+      "id" : "antigravity.MODEL_PLACEHOLDER_M36",
+      "resetAt" : 801001345,
+      "shortLabel" : "MODEL_PLACEHOLDER_M36",
+      "title" : "Gemini 3.1 Pro (Low)",
+      "usedPercent" : 0
+    },
+    {
+      "id" : "antigravity.MODEL_PLACEHOLDER_M35",
+      "resetAt" : 801007251,
+      "shortLabel" : "MODEL_PLACEHOLDER_M35",
+      "title" : "Claude Sonnet 4.6 (Thinking)",
+      "usedPercent" : 0
+    },
+    {
+      "id" : "antigravity.MODEL_PLACEHOLDER_M26",
+      "resetAt" : 801007251,
+      "shortLabel" : "MODEL_PLACEHOLDER_M26",
+      "title" : "Claude Opus 4.6 (Thinking)",
+      "usedPercent" : 0
+    },
+    {
+      "id" : "antigravity.MODEL_OPENAI_GPT_OSS_120B_MEDIUM",
+      "resetAt" : 801007251,
+      "shortLabel" : "MODEL_OPENAI_GPT_OSS_120B_MEDIUM",
+      "title" : "GPT-OSS 120B (Medium)",
+      "usedPercent" : 0
+    }
+  ],
+  "plan" : "Google AI Pro",
+  "queriedAt" : 800989541.218302,
+  "tool" : "antigravity"
+}

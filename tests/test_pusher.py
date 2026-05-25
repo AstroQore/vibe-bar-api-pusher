@@ -3,7 +3,10 @@
 Fixtures under ``tests/fixtures/vibebar/`` mirror a real ``~/.vibebar/``
 layout, including ``settings.json`` with ``miscProviderInstances`` and
 the matching ``quotas/quota-v1-<sha256>.json`` files for both single- and
-multi-instance scenarios.
+multi-instance scenarios. The quota files preserve the multi-source state
+vibe-bar leaves on disk after promoting Gemini / Antigravity / Grok from
+misc to partial-primary (legacy misc-tab snapshots coexist with fresh
+partial-primary writers).
 """
 
 from __future__ import annotations
@@ -105,15 +108,26 @@ def test_slugify_collapses_punctuation():
 # ---------------------------------------------------------------------------
 
 
-def test_lookup_meta_covers_new_tools():
-    """All 23 ToolType variants in vibe-bar should have a PROVIDER_META row."""
+def test_lookup_meta_covers_all_tooltype_cases():
+    """Every ToolType case in vibe-bar should have a PROVIDER_META row.
+
+    Mirror vibe-bar's `Sources/VibeBarCore/Models/ToolType.swift` exactly so a
+    new upstream tool is impossible to forget — the cli is the only thing
+    talking to the dashboard and an unknown tool gets a slugified fallback,
+    which is fine but unbranded.
+    """
     expected = {
         "claude", "codex", "alibaba", "alibabaTokenPlan", "gemini", "antigravity",
-        "copilot", "zai", "minimax", "kimi", "cursor", "mimo", "iflytek",
+        "grok", "copilot", "zai", "minimax", "kimi", "cursor", "mimo", "iflytek",
         "tencentHunyuan", "tencentTokenPlan", "volcengine", "baiduQianfan",
         "openCodeGo", "kilo", "kiro", "ollama", "openRouter", "warp",
     }
     assert expected <= set(pusher.PROVIDER_META.keys())
+
+
+def test_primary_tools_includes_partial_primary():
+    """Primary + partial-primary all merge into one card per tool."""
+    assert pusher.PRIMARY_TOOLS == {"claude", "codex", "gemini", "antigravity", "grok"}
 
 
 def test_lookup_meta_unknown_fallback():
@@ -177,21 +191,21 @@ def test_transform_bucket_missing_required_fields_returns_none():
 
 def test_load_instances_groups_by_tool():
     insts = pusher.load_instances(FIXTURE_SETTINGS)
+    # Gemini/antigravity/grok are NOT here — vibe-bar promoted them out of
+    # miscProviderInstances when it added partial-primary tiers.
     assert set(insts.keys()) == {
-        "gemini", "baiduQianfan", "alibabaTokenPlan",
-        "openCodeGo", "tencentTokenPlan", "kimi",
+        "baiduQianfan", "alibabaTokenPlan",
+        "openCodeGo", "tencentTokenPlan", "kimi", "minimax",
     }
     assert len(insts["openCodeGo"]) == 2
     assert len(insts["tencentTokenPlan"]) == 2
-    assert len(insts["gemini"]) == 1
+    assert len(insts["baiduQianfan"]) == 1
 
 
 def test_load_instances_preserves_visibility_flag():
     insts = pusher.load_instances(FIXTURE_SETTINGS)
-    kimi = insts["kimi"][0]
-    assert kimi.is_visible is False
-    gemini = insts["gemini"][0]
-    assert gemini.is_visible is True
+    assert insts["kimi"][0].is_visible is False
+    assert insts["baiduQianfan"][0].is_visible is True
 
 
 def test_load_instances_missing_settings_returns_empty():
@@ -202,16 +216,16 @@ def test_load_instances_skips_malformed_entries(tmp_path: Path):
     bad = tmp_path / "settings.json"
     bad.write_text(
         json.dumps({"miscProviderInstances": [
-            {"id": "ok", "tool": "gemini"},
+            {"id": "ok", "tool": "kimi"},
             "not a dict",
-            {"id": "", "tool": "kimi"},  # empty id
-            {"tool": "claude"},  # missing id
+            {"id": "", "tool": "mimo"},
+            {"tool": "claude"},
         ]}),
         encoding="utf-8",
     )
     out = pusher.load_instances(bad)
-    assert list(out.keys()) == ["gemini"]
-    assert out["gemini"][0].instance_id == "ok"
+    assert list(out.keys()) == ["kimi"]
+    assert out["kimi"][0].instance_id == "ok"
 
 
 def test_quota_file_for_instance_matches_misc_hash():
@@ -227,52 +241,92 @@ def test_quota_file_for_instance_missing_returns_none():
 
 
 # ---------------------------------------------------------------------------
-# Primary-tool merging (claude / codex)
+# Primary-tool merging + staleness filter
 # ---------------------------------------------------------------------------
 
 
-def test_collect_primary_files_picks_up_cli_and_misc():
+def test_collect_primary_files_picks_up_all_tool_matches():
     files = pusher.collect_primary_files(FIXTURE_QUOTAS, "claude")
-    names = sorted(f[0] for f in files)
-    assert any(n.startswith("cli-claude") for n in names)
-    # At least one quota-v1-* file labelled tool=claude
-    assert any(n.startswith("quota-v1-") for n in names)
+    # 2 quota-v1-* files match tool=claude in the fixture
+    tools = {raw.get("tool") for _, raw in files}
+    assert tools == {"claude"}
+    assert len(files) >= 2
 
 
 def test_merge_primary_files_prefers_freshest_with_full_fields():
     files = pusher.collect_primary_files(FIXTURE_QUOTAS, "claude")
     merged = pusher.merge_primary_files(files)
     assert merged["tool"] == "claude"
-    # Should keep all distinct bucket ids in a single dict; specifically the
-    # five_hour entry from the freshest *complete* file should win
     bucket_ids = {b["id"] for b in merged["buckets"]}
-    assert {"five_hour"} <= bucket_ids
+    assert "five_hour" in bucket_ids
     five_hour = next(b for b in merged["buckets"] if b["id"] == "five_hour")
-    # Real data: the fresh quota-v1 has resetAt + rawWindowSeconds
     assert "resetAt" in five_hour
     assert "rawWindowSeconds" in five_hour
 
 
-def test_merge_primary_files_falls_back_to_older_bucket_if_fresh_lacks_resetAt(tmp_path: Path):
-    """Synthetic case: fresh file has partial bucket, older file has full one."""
+def test_merge_primary_files_falls_back_to_older_bucket_if_fresh_lacks_resetAt():
     fresh = ("fresh.json", {
         "tool": "claude",
         "queriedAt": 1000,
-        "buckets": [{"id": "weekly", "title": "Weekly", "usedPercent": 25}],  # no resetAt
+        "buckets": [{"id": "weekly", "title": "Weekly", "usedPercent": 25}],
     })
-    older = ("older.json", {
+    older_but_within_window = ("older.json", {
         "tool": "claude",
-        "queriedAt": 500,
+        "queriedAt": 500,  # 500s younger, well within 3600s staleness window
         "buckets": [{
             "id": "weekly", "title": "Weekly", "usedPercent": 30,
             "resetAt": 5000, "rawWindowSeconds": 604800,
         }],
     })
-    merged = pusher.merge_primary_files([fresh, older])
+    merged = pusher.merge_primary_files([fresh, older_but_within_window])
     weekly = next(b for b in merged["buckets"] if b["id"] == "weekly")
     assert weekly["resetAt"] == 5000
-    # Top-level queriedAt still comes from the freshest file
     assert merged["queriedAt"] == 1000
+
+
+def test_merge_primary_files_drops_stale_legacy_misc_file():
+    """A file queried >1h before the freshest one is dropped wholesale.
+
+    Real-world cause: vibe-bar migrated Gemini/Antigravity/Grok from misc to
+    partial-primary, leaving the old `misc-<tool>` snapshot file on disk
+    forever frozen at the pre-migration `queriedAt`. Its bucket id schema
+    doesn't match the new writer's, so merging it bleeds stale buckets.
+    """
+    fresh = ("fresh.json", {
+        "tool": "antigravity",
+        "queriedAt": 801391019,  # current writer
+        "buckets": [{"id": "gemini-3.5-flash-medium", "title": "Med", "usedPercent": 0}],
+    })
+    stale_legacy = ("legacy.json", {
+        "tool": "antigravity",
+        "queriedAt": 800989541,  # 5 days behind — pre-migration snapshot
+        "buckets": [{
+            "id": "antigravity.MODEL_PLACEHOLDER_M132", "title": "PH",
+            "usedPercent": 0,
+        }],
+    })
+    merged = pusher.merge_primary_files([fresh, stale_legacy])
+    bucket_ids = {b["id"] for b in merged["buckets"]}
+    assert "gemini-3.5-flash-medium" in bucket_ids
+    # Stale legacy bucket id must NOT survive
+    assert "antigravity.MODEL_PLACEHOLDER_M132" not in bucket_ids
+
+
+def test_merge_primary_files_keeps_co_fresh_files():
+    """Two files within the staleness window both contribute their buckets."""
+    a = ("a.json", {
+        "tool": "claude",
+        "queriedAt": 1000,
+        "buckets": [{"id": "five_hour", "title": "5 Hours", "usedPercent": 10, "resetAt": 9999}],
+    })
+    b = ("b.json", {
+        "tool": "claude",
+        "queriedAt": 900,  # 100s older, within 3600s window
+        "buckets": [{"id": "weekly", "title": "Weekly", "usedPercent": 5, "resetAt": 9999}],
+    })
+    merged = pusher.merge_primary_files([a, b])
+    bucket_ids = {x["id"] for x in merged["buckets"]}
+    assert bucket_ids == {"five_hour", "weekly"}
 
 
 # ---------------------------------------------------------------------------
@@ -317,7 +371,6 @@ def test_build_provider_card_multi_uses_plan_when_no_display_name():
         "quotas/quota-v1-07065a11422e6fa831c8a211dc17dd9e12c38f19b9c9e4fd10f33d050c74e735.json"
     )
     meta = pusher.lookup_meta("tencentTokenPlan")
-    # No instance_meta to test the plan-as-disambiguator fallback
     card = pusher.build_provider_card(meta, instance_meta=None, raw=raw, multi_instance=True)
     assert card["id"] == "tencent-token-plan::standard"
     assert "Standard" in card["subtitle"]
@@ -331,28 +384,47 @@ def test_build_provider_card_multi_uses_plan_when_no_display_name():
 def test_build_envelope_against_fixture():
     payload = pusher.build_envelope(make_cfg())
     ids = [p["id"] for p in payload["providers"]]
+    assert len(ids) == len(set(ids))  # no duplicate ids
 
-    # No duplicate ids
-    assert len(ids) == len(set(ids))
-
-    # Primary: claude merged from cli-claude + 2 quota-v1-* files → one card
+    # All five primary / partial-primary tools collapse to exactly one card
     assert ids.count("claude-cli") == 1
+    assert ids.count("codex-cli") == 1
+    assert ids.count("gemini-cli") == 1
+    assert ids.count("antigravity") == 1
+    assert ids.count("grok") == 1
 
     # Single-instance misc tools keep bare ids
-    assert "gemini-cli" in ids
     assert "baidu-qianfan" in ids
     assert "alibaba-token-plan" in ids
+    assert "minimax" in ids
 
-    # Multi-instance openCodeGo (Google + Github)
+    # Multi-instance misc tools fan out via compound ids
     assert "opencode-go::google" in ids
     assert "opencode-go::github" in ids
-
-    # Multi-instance tencentTokenPlan (Generic + Hy)
     assert "tencent-token-plan::generic" in ids
     assert "tencent-token-plan::hy" in ids
 
-    # kimi is isVisible=false in the fixture settings, no quota file copied
-    assert not any(i.startswith("kimi") for i in ids)
+    # kimi instance is isVisible=false in fixture settings → must not appear
+    assert not any(i == "kimi" or i.startswith("kimi::") for i in ids)
+
+
+def test_build_envelope_grok_card_renders_with_metric():
+    payload = pusher.build_envelope(make_cfg())
+    grok = next(p for p in payload["providers"] if p["id"] == "grok")
+    assert grok["display_name"] == "Grok"
+    assert grok["subtitle"] == "xAI"
+    assert len(grok["metrics"]) == 1
+    assert grok["metrics"][0]["label"] == "Monthly"
+
+
+def test_build_envelope_antigravity_drops_legacy_buckets():
+    """Stale misc-antigravity buckets must not appear on the fresh card."""
+    payload = pusher.build_envelope(make_cfg())
+    antig = next(p for p in payload["providers"] if p["id"] == "antigravity")
+    labels = {m["label"] for m in antig["metrics"]}
+    # New writer's labels are the real model names; legacy MODEL_PLACEHOLDER_*
+    # shortLabels should not survive into a metric label.
+    assert all("MODEL_PLACEHOLDER" not in lab for lab in labels)
 
 
 def test_build_envelope_multi_instance_carries_subtitle_label():
@@ -364,27 +436,15 @@ def test_build_envelope_multi_instance_carries_subtitle_label():
     assert by_id["tencent-token-plan::hy"]["subtitle"] == "Token Plan · Hy"
 
 
-def test_build_envelope_claude_card_has_merged_buckets():
-    payload = pusher.build_envelope(make_cfg())
-    claude = next(p for p in payload["providers"] if p["id"] == "claude-cli")
-    labels = [m["label"] for m in claude["metrics"]]
-    # Fresh quota-v1 file contributes Weekly + Weekly_sonnet + Weekly_design + daily_routines
-    # in addition to the five_hour from any file
-    assert "5 Hours" in labels
-    assert labels.count("Weekly") >= 3  # weekly + sonnet + design (+ daily_routines also titled "Weekly")
-
-
 def test_build_envelope_legacy_fallback_when_no_settings(tmp_path: Path):
-    """If settings.json is missing, misc tools degrade to one-card-per-file."""
+    """No settings.json → primary tools still merge; misc tools degrade to
+    one-card-per-file using their bare PROVIDER_META ids (no compound ids)."""
     cfg = make_cfg(settings_path=tmp_path / "nope.json")
     payload = pusher.build_envelope(cfg)
     ids = [p["id"] for p in payload["providers"]]
-    # Primary still merges
     assert ids.count("claude-cli") == 1
-    # Multi-instance misc tools collapse to a single id each in legacy mode
-    # (whichever file the loop encounters last for that tool)
-    assert ids.count("opencode-go") <= 2  # may have stable order via sorted glob
-    # Specifically, no compound ids in fallback mode
+    assert ids.count("antigravity") == 1
+    assert ids.count("grok") == 1
     assert not any("::" in i for i in ids)
 
 

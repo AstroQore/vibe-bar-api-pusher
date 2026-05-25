@@ -1,0 +1,71 @@
+{
+  "buckets" : [
+    {
+      "groupTitle" : "GPT-OSS",
+      "id" : "gpt-oss-120b-medium",
+      "resetAt" : 801393707,
+      "shortLabel" : "GPT-OSS",
+      "title" : "GPT-OSS 120B (Medium)",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "Gemini Flash",
+      "id" : "gemini-3.5-flash-medium",
+      "resetAt" : 801409460,
+      "shortLabel" : "Med",
+      "title" : "Gemini 3.5 Flash (Medium)",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "Gemini Flash",
+      "id" : "gemini-3.5-flash-high",
+      "resetAt" : 801409460,
+      "shortLabel" : "High",
+      "title" : "Gemini 3.5 Flash (High)",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "Gemini Flash",
+      "id" : "gemini-3.5-flash-low",
+      "resetAt" : 801409460,
+      "shortLabel" : "Low",
+      "title" : "Gemini 3.5 Flash (Low)",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "Gemini Pro",
+      "id" : "gemini-3.1-pro-low",
+      "resetAt" : 801409460,
+      "shortLabel" : "Low",
+      "title" : "Gemini 3.1 Pro (Low)",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "Gemini Pro",
+      "id" : "gemini-3.1-pro-high",
+      "resetAt" : 801409460,
+      "shortLabel" : "High",
+      "title" : "Gemini 3.1 Pro (High)",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "Claude",
+      "id" : "claude-sonnet-4.6-thinking",
+      "resetAt" : 801393707,
+      "shortLabel" : "Sonnet",
+      "title" : "Claude Sonnet 4.6 (Thinking)",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "Claude",
+      "id" : "claude-opus-4.6-thinking",
+      "resetAt" : 801393707,
+      "shortLabel" : "Opus",
+      "title" : "Claude Opus 4.6 (Thinking)",
+      "usedPercent" : 0
+    }
+  ],
+  "plan" : "Google AI Pro",
+  "queriedAt" : 801391616.712377,
+  "tool" : "antigravity"
+}

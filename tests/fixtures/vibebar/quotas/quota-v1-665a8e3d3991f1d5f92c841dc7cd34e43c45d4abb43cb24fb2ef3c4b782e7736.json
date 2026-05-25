@@ -1,0 +1,14 @@
+{
+  "buckets" : [
+    {
+      "id" : "monthly",
+      "resetAt" : 801964800,
+      "shortLabel" : "Monthly",
+      "title" : "Monthly",
+      "usedPercent" : 3.743333339691162
+    }
+  ],
+  "plan" : "SuperGrok",
+  "queriedAt" : 801391617.979473,
+  "tool" : "grok"
+}

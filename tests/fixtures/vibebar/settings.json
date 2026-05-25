@@ -2,12 +2,6 @@
   "refreshIntervalSeconds": 600,
   "miscProviderInstances": [
     {
-      "id": "gemini",
-      "tool": "gemini",
-      "isVisible": true,
-      "settings": {"cookieSource": "auto", "sourceMode": "auto"}
-    },
-    {
       "id": "baiduQianfan",
       "tool": "baiduQianfan",
       "isVisible": true,
@@ -46,6 +40,12 @@
       "displayName": "Hy",
       "isVisible": true,
       "settings": {"cookieSource": "auto", "region": "hunyuan", "sourceMode": "auto"}
+    },
+    {
+      "id": "minimax",
+      "tool": "minimax",
+      "isVisible": true,
+      "settings": {"cookieSource": "auto", "sourceMode": "auto"}
     },
     {
       "id": "kimi",

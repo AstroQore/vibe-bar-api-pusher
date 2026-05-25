@@ -3,28 +3,28 @@
     {
       "id" : "opencodego.rolling",
       "rawWindowSeconds" : 18000,
-      "resetAt" : 800837477.757315,
+      "resetAt" : 801396069.601084,
       "shortLabel" : "5h",
       "title" : "5 Hours",
-      "usedPercent" : 0
+      "usedPercent" : 12
     },
     {
       "id" : "opencodego.weekly",
       "rawWindowSeconds" : 604800,
-      "resetAt" : 801359998.757315,
+      "resetAt" : 801964799.601084,
       "shortLabel" : "Wk",
       "title" : "Weekly",
-      "usedPercent" : 4
+      "usedPercent" : 8
     },
     {
       "id" : "opencodego.monthly",
       "rawWindowSeconds" : 2592000,
-      "resetAt" : 803244113.757315,
+      "resetAt" : 803244114.601084,
       "shortLabel" : "Month",
       "title" : "Monthly",
-      "usedPercent" : 2
+      "usedPercent" : 54
     }
   ],
-  "queriedAt" : 800819477.757315,
+  "queriedAt" : 801391618.601084,
   "tool" : "openCodeGo"
 }

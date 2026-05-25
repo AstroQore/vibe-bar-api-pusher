@@ -1,0 +1,41 @@
+{
+  "buckets" : [
+    {
+      "id" : "five_hour",
+      "rawWindowSeconds" : 18000,
+      "resetAt" : 801392846,
+      "shortLabel" : "5h",
+      "title" : "5 Hours",
+      "usedPercent" : 42
+    },
+    {
+      "id" : "weekly",
+      "rawWindowSeconds" : 604800,
+      "resetAt" : 801901020,
+      "shortLabel" : "wk",
+      "title" : "Weekly",
+      "usedPercent" : 13
+    },
+    {
+      "groupTitle" : "GPT-5.3 Codex Spark",
+      "id" : "gpt_5_3_codex_spark_five_hour",
+      "rawWindowSeconds" : 18000,
+      "resetAt" : 801409614,
+      "shortLabel" : "Spark 5h",
+      "title" : "5 Hours",
+      "usedPercent" : 0
+    },
+    {
+      "groupTitle" : "GPT-5.3 Codex Spark",
+      "id" : "gpt_5_3_codex_spark_weekly",
+      "rawWindowSeconds" : 604800,
+      "resetAt" : 801996414,
+      "shortLabel" : "Spark wk",
+      "title" : "Weekly",
+      "usedPercent" : 0
+    }
+  ],
+  "plan" : "pro",
+  "queriedAt" : 801391614.77921,
+  "tool" : "codex"
+}

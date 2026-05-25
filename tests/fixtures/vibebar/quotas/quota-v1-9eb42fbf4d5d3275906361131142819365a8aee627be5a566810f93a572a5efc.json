@@ -1,0 +1,21 @@
+{
+  "buckets" : [
+    {
+      "id" : "weekly",
+      "resetAt" : 801515111.8846209,
+      "shortLabel" : "Wk",
+      "title" : "Weekly",
+      "usedPercent" : 1.1432360000000001
+    },
+    {
+      "id" : "five_hour",
+      "resetAt" : 801360311.884512,
+      "shortLabel" : "5h",
+      "title" : "5 Hours",
+      "usedPercent" : 0
+    }
+  ],
+  "plan" : "Pro",
+  "queriedAt" : 801344661.962127,
+  "tool" : "gemini"
+}

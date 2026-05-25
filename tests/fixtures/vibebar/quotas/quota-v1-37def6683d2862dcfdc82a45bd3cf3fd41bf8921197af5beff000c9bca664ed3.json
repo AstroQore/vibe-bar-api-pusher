@@ -3,7 +3,7 @@
     {
       "id" : "baiduQianfan.5h",
       "rawWindowSeconds" : 18000,
-      "resetAt" : 800820600,
+      "resetAt" : 801392400,
       "shortLabel" : "5h",
       "title" : "5 Hours",
       "usedPercent" : 1.9166666666666665
@@ -11,20 +11,20 @@
     {
       "id" : "baiduQianfan.weekly",
       "rawWindowSeconds" : 604800,
-      "resetAt" : 801331200,
+      "resetAt" : 801936000,
       "shortLabel" : "Wk",
       "title" : "Weekly",
-      "usedPercent" : 0.2577777777777778
+      "usedPercent" : 0.6533333333333333
     },
     {
       "id" : "baiduQianfan.monthly",
       "resetAt" : 803480119,
       "shortLabel" : "Mo",
       "title" : "Monthly",
-      "usedPercent" : 0.1288888888888889
+      "usedPercent" : 4.416666666666667
     }
   ],
   "plan" : "Pro",
-  "queriedAt" : 800819499.396973,
+  "queriedAt" : 801391632.110867,
   "tool" : "baiduQianfan"
 }
